@@ -5,9 +5,10 @@ import numpy as np
 import socketio
 import glob
 
-io = socketio.Client()
+io = socketio.Client(reconnection=True, logger=True)
 
-io.connect('http://localhost:8000', headers={'auth': 'mohammad'})
+io.connect('http://localhost:8000')
+io.emit('raspberry_connect', {'SerialNumber': '12345'})
 
 # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
 # other example, but it includes some basic performance tweaks to make things run a lot faster:
@@ -81,7 +82,7 @@ while True:
     process_this_frame = not process_this_frame
 
     if face_names != []:
-        io.emit('detected_faces',{'names':face_names})
+        io.emit('detected_faces', {'names': face_names})
 
     # # Display the results
     # for (top, right, bottom, left), name in zip(face_locations, face_names):

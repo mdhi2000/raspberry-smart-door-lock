@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "rsdl-server"
+		},
+		{
+			"path": "raspberry"
+		},
+		{
+			"path": "RsdlMobile"
+		}
+	],
+	"settings": {}
+}

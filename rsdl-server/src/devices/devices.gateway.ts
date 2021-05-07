@@ -12,31 +12,19 @@ import {
 import { Socket, Server } from 'socket.io';
 import { RaspberryConnectDto } from './Dtos/raspberry-connect.dto';
 import { RaspberryDevice } from './interfaces/raspberry-device.interface';
-import * as WebSocket from 'ws';
 
-@WebSocketGateway()
-export class DevicesGateway
-  implements OnGatewayConnection, OnGatewayDisconnect {
+@WebSocketGateway(8001)
+export class DevicesGateway implements OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
   private raspberryDevices: RaspberryDevice[] = [];
-
-  handleConnection(@ConnectedSocket() client: WebSocket): WsResponse<any> {
-    console.log('id:', client.id);
-    const raspberryDevice: RaspberryDevice = {
-      SerialNumber: '12345',
-      SocketId: client.id,
-    };
-    this.raspberryDevices.push(raspberryDevice);
-    console.log(this.raspberryDevices);
-    return { event: 'connected', data: 'ok' };
-  }
 
   @SubscribeMessage('raspberry_connect')
   handleMessage(
     @MessageBody() Data: RaspberryConnectDto,
     @ConnectedSocket() client: Socket,
   ): Record<string, unknown> {
+    console.log(Data);
     if (Data.SerialNumber) {
       const raspberryDevice: RaspberryDevice = {
         SerialNumber: Data.SerialNumber,
@@ -47,6 +35,11 @@ export class DevicesGateway
       return { statusCode: HttpStatus.OK, message: 'connected' };
     }
     return { statusCode: HttpStatus.BAD_REQUEST };
+  }
+
+  @SubscribeMessage('detected_faces')
+  handleFaceDetect(@MessageBody() Data: unknown) {
+    console.log(Data);
   }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {

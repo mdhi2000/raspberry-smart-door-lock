@@ -7,8 +7,8 @@ import glob
 
 io = socketio.Client(reconnection=True, logger=True)
 
-io.connect('http://localhost:8000')
-io.emit('raspberry_connect', {'SerialNumber': '12345'})
+io.connect('http://localhost:8001')
+print(io.emit('raspberry_connect', {'SerialNumber': '12345'}))
 
 # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
 # other example, but it includes some basic performance tweaks to make things run a lot faster:

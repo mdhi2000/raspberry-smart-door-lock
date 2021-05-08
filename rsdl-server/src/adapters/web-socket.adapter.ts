@@ -22,7 +22,10 @@ export class WsAdapter implements WebSocketAdapter {
   ) {
     for (const handler of handlers) {
       // console.log(handler);
-      client.on(handler.message, handler.callback);
+      client.on(handler.message, (data: any) => {
+        // handler.callback(data);
+        return JSON.stringify(handler.callback(data));
+      });
     }
     // fromEvent(client, 'message')
     //   .pipe(

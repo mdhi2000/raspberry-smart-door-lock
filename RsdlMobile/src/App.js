@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from "react"
+import React, { useEffect } from "react"
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View } from "react-native"
 
 import {
@@ -16,8 +16,10 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from "react-native/Libraries/NewAppScreen"
-
-const ws = new WebSocket("ws://localhost:8000")
+import  io  from "socket.io-client"
+// import { socket } from "./socket-test"
+const socket = io("http://192.168.54.58:8001")
+// const socket = io("ws://localhost:8001")
 
 const Section = ({ children, title }) => {
   const isDarkMode = useColorScheme() === "dark"
@@ -48,6 +50,10 @@ const Section = ({ children, title }) => {
 }
 
 const App = () => {
+  useEffect(() => {
+    // const socket = io("http://192.168.54.58:8001")
+  }, [])
+
   const isDarkMode = useColorScheme() === "dark"
 
   const backgroundStyle = {

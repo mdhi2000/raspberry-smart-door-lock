@@ -14,10 +14,15 @@ import { RaspberryConnectDto } from './Dtos/raspberry-connect.dto';
 import { RaspberryDevice } from './interfaces/raspberry-device.interface';
 
 @WebSocketGateway(8001)
-export class DevicesGateway implements OnGatewayDisconnect {
+export class DevicesGateway
+  implements OnGatewayDisconnect, OnGatewayConnection {
   @WebSocketServer()
   server: Server;
   private raspberryDevices: RaspberryDevice[] = [];
+
+  handleConnection(@ConnectedSocket() client: Socket) {
+    console.log('connected id:', client.id);
+  }
 
   @SubscribeMessage('raspberry_connect')
   handleMessage(
@@ -39,6 +44,10 @@ export class DevicesGateway implements OnGatewayDisconnect {
 
   @SubscribeMessage('detected_faces')
   handleFaceDetect(@MessageBody() Data: unknown) {
+    console.log(Data);
+  }
+  @SubscribeMessage('test')
+  handleTest(@MessageBody() Data: unknown) {
     console.log(Data);
   }
 

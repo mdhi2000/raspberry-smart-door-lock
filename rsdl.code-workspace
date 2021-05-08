@@ -4,10 +4,10 @@
 			"path": "rsdl-server"
 		},
 		{
-			"path": "raspberry"
+			"path": "RsdlMobile"
 		},
 		{
-			"path": "RsdlMobile"
+			"path": "raspberry"
 		}
 	],
 	"settings": {}

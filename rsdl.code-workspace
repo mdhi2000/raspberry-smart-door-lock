@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "raspberry"
+		},
+		{
+			"path": "rsdl-front"
 		}
 	],
 	"settings": {}

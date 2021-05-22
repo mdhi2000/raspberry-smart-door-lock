@@ -46,6 +46,7 @@ export class DevicesGateway
   handleFaceDetect(@MessageBody() Data: unknown) {
     console.log(Data);
   }
+
   @SubscribeMessage('test')
   handleTest(@MessageBody() Data: unknown) {
     console.log(Data);

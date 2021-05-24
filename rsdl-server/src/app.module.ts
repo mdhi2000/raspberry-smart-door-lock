@@ -3,7 +3,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DevicesModule } from './devices/devices.module';
-import { GlobalServicesModule } from './global-services/global-services.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -11,7 +10,6 @@ import { UsersModule } from './users/users.module';
     DevicesModule,
     MongooseModule.forRoot('mongodb://127.0.0.1/rsdl'),
     UsersModule,
-    GlobalServicesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

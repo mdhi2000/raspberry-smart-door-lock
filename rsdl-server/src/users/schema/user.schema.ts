@@ -18,7 +18,7 @@ export class User {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Device' }] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: Device.name }] })
   devices: Device[];
 }
 

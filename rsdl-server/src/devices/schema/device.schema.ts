@@ -9,7 +9,7 @@ export class Device {
   @Prop({ required: true })
   serialNumber: string;
 
-  @Prop({ type: { type: mongoose.Schema.Types.ObjectId, ref: 'User' } })
+  @Prop({ type: { type: mongoose.Schema.Types.ObjectId, ref: User.name } })
   owner: User;
 }
 

@@ -30,6 +30,8 @@
     "@nestjs/platform-ws": "^7.6.15",
     "@nestjs/websockets": "^7.6.15",
     "crypto": "^1.0.1",
+    "dotenv": "^10.0.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.7",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

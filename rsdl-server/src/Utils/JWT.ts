@@ -1,4 +1,6 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { sign, verify } from 'jsonwebtoken';
+import { Model } from 'mongoose';
 import { UserDocument } from 'src/users/schema/user.schema';
 
 type TokenType =
@@ -80,32 +82,34 @@ export const generateToken = async (
 export const verifyToken = async (
   token: string,
   type: TokenType,
-): Promise<User> => {
+): Promise<UserDocument> => {
+  let userModel: Model<UserDocument>;
   let currentUser;
 
   await verify(token, common[type].privateKey, async (err, data) => {
     if (err) {
-      throw new AuthenticationError(
+      throw new HttpException(
         'Authentication token is invalid, please try again.',
+        HttpStatus.FORBIDDEN,
       );
     }
 
     // console.log(data)
 
-    currentUser = await getMongoRepository(User).findOne({
+    currentUser = await userModel.findOne({
       _id: data._id,
     });
   });
 
-  if (type === 'emailToken') {
-    return currentUser;
-  }
+  // if (type === 'emailToken') {
+  //   return currentUser;
+  // }
 
   // console.log(currentUser)
 
-  if (currentUser && !currentUser.isVerified) {
-    throw new ForbiddenError('Please verify your email.');
-  }
+  // if (currentUser && !currentUser.isVerified) {
+  //   throw new ForbiddenError('Please verify your email.');
+  // }
 
   return currentUser;
 };

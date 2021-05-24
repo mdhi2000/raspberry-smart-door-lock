@@ -2,12 +2,9 @@ import jwt_decode from "jwt-decode"
 import { loginPath } from "./paths"
 
 const apiServices = {
-  //baseUrl: 'https://scfapi.testprojects.ir/',
   baseUrl: "http://127.0.0.1:5000",
 
-  test() {
-    alert("ok")
-  },
+  accessToken: "",
 
   path(urlPath) {
     this._path = urlPath
@@ -47,13 +44,13 @@ const apiServices = {
     }
     return this
   },
-  getRefreshToken() {
-    return this.getValue("refreshToken")
-  },
-  clearRefreshToken() {
-    localStorage.removeItem("refreshToken")
-    return this
-  },
+  // getRefreshToken() {
+  //   return this.getValue("refreshToken")
+  // },
+  // clearRefreshToken() {
+  //   localStorage.removeItem("refreshToken")
+  //   return this
+  // },
 
   storeValue(key, value) {
     if (key === "" || key === undefined) {
@@ -161,7 +158,7 @@ const apiServices = {
     }
     let oldToken = this.getToken()
     if (oldToken != null && oldToken !== undefined) {
-      requestHeaders["Authorization"] = `${oldToken}`
+      requestHeaders["Authorization"] = `bearer ${oldToken}`
     }
     const requestMethod = this._method || "POST"
     let requestProps = {

@@ -3,17 +3,13 @@ import { sign, verify } from 'jsonwebtoken';
 import { Model } from 'mongoose';
 import { UserDocument } from 'src/users/schema/user.schema';
 
-type TokenType =
-  | 'accessToken'
-  | 'refreshToken'
-  | 'emailToken'
-  | 'resetPassToken';
+type TokenType = 'accessToken' | 'refreshToken' | 'resetPassToken';
 
 const common = {
   accessToken: {
     privateKey: process.env.ACCESS_TOKEN_SECRET,
     signOptions: {
-      expiresIn: '30d', // 15m
+      expiresIn: '5m', // 15m
     },
   },
   refreshToken: {
@@ -53,13 +49,9 @@ export const generateToken = async (
     },
     common[type].privateKey,
     {
-      issuer: ISSUER,
-      subject: user.local
-        ? user.local.email
-        : user.google
-        ? user.google.email
-        : user.facebook.email,
-      audience: AUDIENCE,
+      issuer: process.env.ISSUER,
+      subject: user.email,
+      // audience: process.env.AUDIENCE,
       algorithm: 'HS256',
       expiresIn: common[type].signOptions.expiresIn, // 15m
     },

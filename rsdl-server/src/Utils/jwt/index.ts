@@ -2,24 +2,31 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { sign, verify } from 'jsonwebtoken';
 import { Model } from 'mongoose';
 import { UserDocument } from 'src/users/schema/user.schema';
+import {
+  ACCESS_TOKEN_SECRET,
+  REFRESH_TOKEN_SECRET,
+  RESETPASS_TOKEN_SECRET,
+  ISSIUER,
+  COOKIE_JWT_URL,
+} from '../environments';
 
 type TokenType = 'accessToken' | 'refreshToken' | 'resetPassToken';
 
 const common = {
   accessToken: {
-    privateKey: process.env.ACCESS_TOKEN_SECRET,
+    privateKey: ACCESS_TOKEN_SECRET,
     signOptions: {
       expiresIn: '5m', // 15m
     },
   },
   refreshToken: {
-    privateKey: process.env.REFRESH_TOKEN_SECRET,
+    privateKey: REFRESH_TOKEN_SECRET,
     signOptions: {
       expiresIn: '7d', // 7d
     },
   },
   resetPassToken: {
-    privateKey: process.env.RESETPASS_TOKEN_SECRET,
+    privateKey: RESETPASS_TOKEN_SECRET,
     signOptions: {
       expiresIn: '1d', // 1d
     },
@@ -49,7 +56,7 @@ export const generateToken = async (
     },
     common[type].privateKey,
     {
-      issuer: process.env.ISSUER,
+      issuer: ISSIUER,
       subject: user.email,
       // audience: process.env.AUDIENCE,
       algorithm: 'HS256',
@@ -118,7 +125,9 @@ export const verifyToken = async (
  *
  * @beta
  */
-export const tradeToken = async (user: UserDocument): Promise<any> => {
+export const tradeToken = async (
+  user: UserDocument,
+): Promise<Record<string, any>> => {
   // if (!user.isVerified) {
   //   throw new ForbiddenError('Please verify your email.');
   // }
@@ -135,4 +144,14 @@ export const tradeToken = async (user: UserDocument): Promise<any> => {
   const refreshToken = await generateToken(user, 'refreshToken');
 
   return { accessToken, refreshToken };
+};
+
+export const setRefreshToken = (response, refreshToken): void => {
+  response.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    domain: COOKIE_JWT_URL,
+    maxAge: 604800000,
+    sameSite: 'strict',
+    secure: process.env.Node_ENV !== 'development',
+  });
 };

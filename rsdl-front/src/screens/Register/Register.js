@@ -78,7 +78,7 @@ const Register = () => {
         {props => (
           <Form>
             <Center flexDir="column">
-              <h1>Login</h1>
+              <h1>Register</h1>
               {fields.map(field => (
                 <Box m={3}>
                   <TextField

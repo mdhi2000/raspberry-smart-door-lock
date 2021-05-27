@@ -1,11 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
+import { Document } from 'mongoose';
 import { Device } from '../../devices/schema/device.schema';
 
-export type UserDocument = User & mongoose.Document;
+export type UserDocument = User & Document;
 
 @Schema()
-export class User {
+export class User extends Document {
   @Prop({ required: true })
   firstName: string;
 
@@ -18,7 +19,14 @@ export class User {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: Device.name }] })
+  @Prop({
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'devices',
+      },
+    ],
+  })
   devices: Device[];
 }
 

@@ -1,3 +1,4 @@
+import axios from "axios"
 import jwt_decode from "jwt-decode"
 import { loginPath } from "./paths"
 
@@ -94,16 +95,37 @@ const apiServices = {
           onError?.(error, this._data)
         }
       })
+    // axios
+    //   .get(this.baseUrl + "/auth/refresh",{
+    //     withCredentials:true
+    //   })
+    //   .then(res => res.json())
+    //   .then(result => {
+    //     if (result.statusCode === 403) {
+    //       window.location.href = loginPath
+    //       return false
+    //     }
+    //     this.setToken(result.accessToken)
+    //     if (prevReq) {
+    //       return prevReq.request(onSuccess, onError)
+    //     }
+    //     return true
+    //   })
+    //   .catch(error => {
+    //     if (onError && typeof onError === "function") {
+    //       onError?.(error, this._data)
+    //     }
+    //   })
   },
 
   checkAuth() {
     const accessToken = this.getToken()
     // const refreshToken = this.getRefreshToken()
-    if (!accessToken){
+    if (!accessToken) {
       console.log("no token")
       this.refreshAuth()
       return
-    } 
+    }
 
     // try {
     //   const { exp } = jwt_decode(refreshToken)
@@ -154,6 +176,7 @@ const apiServices = {
     let requestHeaders = {
       "Content-Type": "application/json",
       Accept: "application/json",
+      credentials: "include",
     }
     let oldToken = this.getToken()
     if (oldToken != null && oldToken !== undefined) {
@@ -190,6 +213,7 @@ const apiServices = {
     let requestHeaders = {
       "cache-control": "no-cache",
       Accept: "application/json",
+      credentials: "include",
     }
     let oldToken = this.getToken()
     if (oldToken != null && oldToken !== undefined) {
@@ -226,6 +250,7 @@ const apiServices = {
     const link = this.baseUrl + this._path
     let requestHeaders = {
       "Content-Type": "application/json",
+      credentials: "include",
     }
     let oldToken = this.getToken()
     if (oldToken != null && oldToken !== undefined) {

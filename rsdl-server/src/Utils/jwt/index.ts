@@ -1,4 +1,5 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, Logger } from '@nestjs/common';
+import { Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
 import { Model } from 'mongoose';
 import { UserDocument } from 'src/users/schema/user.schema';
@@ -81,9 +82,8 @@ export const generateToken = async (
 export const verifyToken = async (
   token: string,
   type: TokenType,
-): Promise<UserDocument> => {
-  let userModel: Model<UserDocument>;
-  let currentUser;
+): Promise<string> => {
+  let currentUser = null;
 
   await verify(token, common[type].privateKey, async (err, data) => {
     if (err) {
@@ -95,11 +95,8 @@ export const verifyToken = async (
 
     // console.log(data)
 
-    currentUser = await userModel.findOne({
-      _id: data._id,
-    });
+    currentUser = data._id;
   });
-
   // if (type === 'emailToken') {
   //   return currentUser;
   // }
@@ -139,19 +136,22 @@ export const tradeToken = async (
   // if (user.isLocked) {
   //   throw new ForbiddenError('Your email has been locked.');
   // }
-
   const accessToken = await generateToken(user, 'accessToken');
   const refreshToken = await generateToken(user, 'refreshToken');
 
   return { accessToken, refreshToken };
 };
 
-export const setRefreshToken = (response, refreshToken): void => {
+export const setRefreshToken = (
+  response: Response,
+  refreshToken: string,
+): Response => {
   response.cookie('refreshToken', refreshToken, {
     httpOnly: true,
-    domain: COOKIE_JWT_URL,
+    // domain: COOKIE_JWT_URL,
     maxAge: 604800000,
-    sameSite: 'strict',
-    secure: process.env.Node_ENV !== 'development',
+    // sameSite: 'strict',
+    // secure: process.env.Node_ENV !== 'development',
   });
+  return response;
 };

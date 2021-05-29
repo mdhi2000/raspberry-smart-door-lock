@@ -29,6 +29,7 @@
     "@nestjs/platform-socket.io": "^7.6.15",
     "@nestjs/platform-ws": "^7.6.15",
     "@nestjs/websockets": "^7.6.15",
+    "cookie-parser": "^1.4.5",
     "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
     "jsonwebtoken": "^8.5.1",

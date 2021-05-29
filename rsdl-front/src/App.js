@@ -7,7 +7,9 @@ import {
 } from 'react-router-dom'
 import Login from './screens/Login';
 import Register from './screens/Register/Register';
-import { homePath, loginPath, registerPath } from './global/paths';
+import { homePath, loginPath, registerPath, dashboardPath } from './global/paths';
+import ProtectedRoute from './components/ProtectedRoute';
+import Dashboard from './screens/dashboard';
 
 
 function App() {
@@ -23,6 +25,9 @@ function App() {
         <Route path={registerPath} >
           <Register />
         </Route>
+        <ProtectedRoute path={dashboardPath}>
+          <Dashboard />
+        </ProtectedRoute>
       </Switch>
     </Router>
   );

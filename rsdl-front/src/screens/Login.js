@@ -5,7 +5,8 @@ import { Center } from "../components/StyleComponents"
 import * as yup from "yup"
 import yupPassword from "yup-password"
 import apiServices from "../global/apiServices"
-import { serverPaths } from "../global/paths"
+import { dashboardPath, serverPaths } from "../global/paths"
+import { useHistory, useLocation } from "react-router"
 
 yupPassword(yup)
 
@@ -23,19 +24,13 @@ const fields = [
 ]
 
 const validation = yup.object({
-  firstName: yup.string().required("This Field Is Required"),
-  lastName: yup.string().required("This Field Is Required"),
   email: yup.string().email("Invalid Email").required("This Field Is Required"),
   password: yup.string().password().minSymbols(0).required("This Field Is Required"),
-  confirmPassword: yup
-    .string()
-    .password()
-    .minSymbols(0)
-    .oneOf([yup.ref("password"), null])
-    .required("This Field Is Required"),
 })
 
 const Login = () => {
+  const history = useHistory()
+  const location = useLocation()
   return (
     <Center height="100vh">
       <Formik
@@ -46,11 +41,14 @@ const Login = () => {
         validationSchema={validation}
         onSubmit={(values, actions) => {
           apiServices
-            .path(serverPaths.userCreate)
+            .path(serverPaths.login)
             .data(values)
             .method("POST")
             .request(
-              res => console.log(res),
+              res => {
+                // apiServices.setToken(res.accessToken)
+                history.push(location.state?.from || dashboardPath)
+              },
               err => console.log(err)
             )
           actions.setSubmitting(false)
@@ -76,7 +74,7 @@ const Login = () => {
                 </Box>
               ))}
               <Button type="submit" variant="contained" color="primary">
-                Register
+                Login
               </Button>
             </Center>
           </Form>

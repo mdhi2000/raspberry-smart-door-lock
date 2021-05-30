@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { DevicesModule } from './devices/devices.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -12,6 +13,9 @@ import { AuthModule } from './auth/auth.module';
     MongooseModule.forRoot('mongodb://127.0.0.1/rsdl'),
     UsersModule,
     AuthModule,
+    ConfigModule.forRoot({
+      envFilePath: ['.env', '.env.development', '.env.development.local'],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

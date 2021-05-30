@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
-import { Model } from 'mongoose';
 import { UserDocument } from 'src/users/schema/user.schema';
 import {
   ACCESS_TOKEN_SECRET,
@@ -148,7 +147,7 @@ export const setRefreshToken = (
 ): Response => {
   response.cookie('refreshToken', refreshToken, {
     httpOnly: true,
-    // domain: COOKIE_JWT_URL,
+    domain: COOKIE_JWT_URL,
     maxAge: 604800000,
     // sameSite: 'strict',
     // secure: process.env.Node_ENV !== 'development',

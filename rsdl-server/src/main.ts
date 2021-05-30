@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config({ path: '../.env' });
 import { NestFactory } from '@nestjs/core';
 import { WsAdapter } from './adapters/web-socket.adapter';
 import { AppModule } from './app.module';

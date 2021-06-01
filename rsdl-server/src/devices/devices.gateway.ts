@@ -52,6 +52,14 @@ export class DevicesGateway
     console.log(Data);
   }
 
+  handleOpen(SerialNumber: string) {
+    const device = this.raspberryDevices.find(
+      (x) => x.SerialNumber === SerialNumber,
+    );
+    if (device) return this.server.to(device.SocketId).emit('open');
+    return false;
+  }
+
   handleDisconnect(@ConnectedSocket() client: Socket) {
     this.raspberryDevices = this.raspberryDevices.filter(
       (x) => x.SocketId !== client.id,
